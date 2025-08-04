@@ -134,11 +134,16 @@ class IoUCalculator:
                 return 0.0
             
             iou = intersection_area / union_area
-            return max(0.0, min(1.0, iou))
+            
+            # IoU değerini kontrol et
+            if iou < 0.0 or iou > 1.0:
+                raise ValueError(f"Geçersiz IoU değeri: {iou:.6f} (0.0-1.0 aralığında olmalı)")
+            
+            return iou
             
         except Exception as e:
             print(f"IoU hesaplama hatası: {e}")
-            return 0.0
+            raise  # Exception'ı yeniden fırlat
     
     def find_matching_instances(self, obb_data: List[Dict], seg_data: Dict) -> List[tuple]:
         """
