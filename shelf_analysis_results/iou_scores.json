@@ -1,0 +1,241 @@
+{
+  "analysis_summary": {
+    "total_images": 2,
+    "total_instances": 31,
+    "overall_mean_iou": 0.7433802144087988,
+    "overall_median_iou": 0.7994778058330292
+  },
+  "image_results": [
+    {
+      "image_id": "00001",
+      "instances": [
+        {
+          "instance_id": "00",
+          "class_name": "shelf",
+          "iou_score": 0.8731602497776922,
+          "obb_area": 203467.46592000005,
+          "mask_area": 234416
+        },
+        {
+          "instance_id": "01",
+          "class_name": "shelf",
+          "iou_score": 0.9177492289508825,
+          "obb_area": 160990.39087200013,
+          "mask_area": 176666
+        },
+        {
+          "instance_id": "02",
+          "class_name": "shelf",
+          "iou_score": 0.9075732646059889,
+          "obb_area": 127474.74625799997,
+          "mask_area": 141636
+        },
+        {
+          "instance_id": "03",
+          "class_name": "shelf",
+          "iou_score": 0.7994778058330292,
+          "obb_area": 119835.4735919999,
+          "mask_area": 151464
+        },
+        {
+          "instance_id": "04",
+          "class_name": "shelf",
+          "iou_score": 0.8810154468666638,
+          "obb_area": 16664.870452499992,
+          "mask_area": 19110
+        },
+        {
+          "instance_id": "05",
+          "class_name": "shelf",
+          "iou_score": 0.8722993946440483,
+          "obb_area": 11625.766528499993,
+          "mask_area": 13320
+        },
+        {
+          "instance_id": "06",
+          "class_name": "shelf-space",
+          "iou_score": 0.8542867256537977,
+          "obb_area": 358599.31115400005,
+          "mask_area": 421500
+        },
+        {
+          "instance_id": "07",
+          "class_name": "shelf-space",
+          "iou_score": 0.7096846057843531,
+          "obb_area": 747662.5110780001,
+          "mask_area": 762485
+        },
+        {
+          "instance_id": "08",
+          "class_name": "shelf-space",
+          "iou_score": 0.910987719437389,
+          "obb_area": 443887.802838,
+          "mask_area": 473495
+        },
+        {
+          "instance_id": "09",
+          "class_name": "shelf-space",
+          "iou_score": 0.7551414508056462,
+          "obb_area": 470603.8680000002,
+          "mask_area": 491565
+        }
+      ],
+      "mean_iou": 0.8481375892359491,
+      "instance_count": 10
+    },
+    {
+      "image_id": "00002",
+      "instances": [
+        {
+          "instance_id": "00",
+          "class_name": "shelf",
+          "iou_score": 0.8186226570152669,
+          "obb_area": 36769.890000000014,
+          "mask_area": 45371
+        },
+        {
+          "instance_id": "01",
+          "class_name": "shelf",
+          "iou_score": 0.7991088379257838,
+          "obb_area": 36304.409999999996,
+          "mask_area": 46266
+        },
+        {
+          "instance_id": "02",
+          "class_name": "shelf",
+          "iou_score": 0.9715044451432508,
+          "obb_area": 36087.66000000001,
+          "mask_area": 37841
+        },
+        {
+          "instance_id": "03",
+          "class_name": "shelf",
+          "iou_score": 0.9839104800475275,
+          "obb_area": 54028.170000000035,
+          "mask_area": 55396
+        },
+        {
+          "instance_id": "04",
+          "class_name": "shelf",
+          "iou_score": 0.9701342634215586,
+          "obb_area": 36772.08000000002,
+          "mask_area": 38286
+        },
+        {
+          "instance_id": "05",
+          "class_name": "shelf",
+          "iou_score": 0.766855742781218,
+          "obb_area": 38351.06999999995,
+          "mask_area": 50906
+        },
+        {
+          "instance_id": "06",
+          "class_name": "shelf",
+          "iou_score": 0.0,
+          "obb_area": 0.0,
+          "mask_area": 36329
+        },
+        {
+          "instance_id": "07",
+          "class_name": "shelf",
+          "iou_score": 0.7849818064712955,
+          "obb_area": 13481.123879999996,
+          "mask_area": 17481
+        },
+        {
+          "instance_id": "08",
+          "class_name": "shelf",
+          "iou_score": 0.7984158206223996,
+          "obb_area": 14981.883268500007,
+          "mask_area": 19176
+        },
+        {
+          "instance_id": "09",
+          "class_name": "shelf",
+          "iou_score": 0.9768890919666762,
+          "obb_area": 24691.65154050001,
+          "mask_area": 25516
+        },
+        {
+          "instance_id": "10",
+          "class_name": "shelf",
+          "iou_score": 0.8539882673322424,
+          "obb_area": 27041.467099500034,
+          "mask_area": 32021
+        },
+        {
+          "instance_id": "11",
+          "class_name": "shelf",
+          "iou_score": 0.8650221918295272,
+          "obb_area": 29352.649328999978,
+          "mask_area": 34101
+        },
+        {
+          "instance_id": "12",
+          "class_name": "shelf",
+          "iou_score": 0.0,
+          "obb_area": 0.0,
+          "mask_area": 23703
+        },
+        {
+          "instance_id": "13",
+          "class_name": "shelf-space",
+          "iou_score": 0.7678559150870979,
+          "obb_area": 231668.02979099998,
+          "mask_area": 302731
+        },
+        {
+          "instance_id": "14",
+          "class_name": "shelf-space",
+          "iou_score": 0.6554746098322524,
+          "obb_area": 156443.0356800001,
+          "mask_area": 239231
+        },
+        {
+          "instance_id": "15",
+          "class_name": "shelf-space",
+          "iou_score": 0.6319498799309684,
+          "obb_area": 186764.5157759999,
+          "mask_area": 266966
+        },
+        {
+          "instance_id": "16",
+          "class_name": "shelf-space",
+          "iou_score": 0.6571711151064799,
+          "obb_area": 251864.5449480001,
+          "mask_area": 342066
+        },
+        {
+          "instance_id": "17",
+          "class_name": "shelf-space",
+          "iou_score": 0.718645647803258,
+          "obb_area": 263248.3706399999,
+          "mask_area": 357560
+        },
+        {
+          "instance_id": "18",
+          "class_name": "shelf-space",
+          "iou_score": 0.0,
+          "obb_area": 0.0,
+          "mask_area": 85629
+        },
+        {
+          "instance_id": "19",
+          "class_name": "shelf-space",
+          "iou_score": 0.6354864309260246,
+          "obb_area": 194803.14,
+          "mask_area": 212217
+        },
+        {
+          "instance_id": "20",
+          "class_name": "shelf-space",
+          "iou_score": 0.9073935510704408,
+          "obb_area": 204102.67239750002,
+          "mask_area": 225406
+        }
+      ],
+      "mean_iou": 0.6934957502053939,
+      "instance_count": 21
+    }
+  ]
+}
