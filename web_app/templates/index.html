@@ -110,6 +110,14 @@
         .visualization-panel {
             flex: 1;
         }
+        .sort-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -131,6 +139,7 @@
                         <li><strong>Doğru Yapı:</strong> ZIP içinde direkt JPG ve JSON dosyaları olmalı</li>
                         <li><strong>Örnek:</strong> <code>dataset.zip</code> → <code>00011.jpg</code>, <code>00011.json</code>, <code>00012.jpg</code>, <code>00012.json</code>...</li>
                         <li><strong>Yanlış:</strong> ZIP içinde klasör olmamalı</li>
+                        <li><strong>Boyut:</strong> Sınırsız</li>
                     </ul>
                 </div>
             </div>
@@ -169,6 +178,10 @@
                         <h5><i class="fas fa-list"></i> Görsel Seçici</h5>
                     </div>
                     <div class="card-body">
+                        <div class="sort-info">
+                            <i class="fas fa-sort-amount-down"></i> 
+                            <strong>Sıralama:</strong> Görseller mean IoU'ya göre sıralanmıştır (en kötü sonuçlar önce)
+                        </div>
                         <div class="row">
                             <div class="col-md-3">
                                 <button id="prevBtn" class="btn btn-secondary">
@@ -213,11 +226,14 @@
                         <div class="visualization-container" id="imageContainer">
                             <div class="visualization-panel">
                                 <div class="image-container">
-                                    <div class="image-title">Segmentation Mask</div>
-                                    <img id="leftImage" src="" alt="Segmentation Mask">
+                                    <div class="image-title">Eski OBB + Mask</div>
+                                    <img id="leftImage" src="" alt="Eski OBB + Mask">
                                     <div class="legend">
                                         <div class="legend-item">
                                             <span class="legend-color" style="background: green;"></span>Ground Truth
+                                        </div>
+                                        <div class="legend-item">
+                                            <span class="legend-color" style="background: red;"></span>Eski OBB
                                         </div>
                                     </div>
                                 </div>
@@ -251,6 +267,7 @@
         let currentImageIndex = 0;
         let totalImages = 0;
         let imagesList = [];
+        let sortedToOriginalIndex = []; // Sıralanmış index'ten orijinal index'e mapping
 
         // Dosya yükleme
         document.getElementById('datasetFile').addEventListener('change', function(e) {
@@ -320,7 +337,6 @@
                     document.getElementById('visualizationRow').style.display = 'block';
                     
                     loadImageList();
-                    loadImage(0);
                 } else {
                     document.getElementById('datasetStatus').innerHTML = 
                         `<div class="alert alert-danger">
@@ -338,32 +354,57 @@
         }
 
         // Görsel listesini yükle
-        function loadImageList() {
-            fetch('/get_image_list')
-            .then(response => response.json())
-            .then(data => {
+        async function loadImageList() {
+            try {
+                const response = await fetch('/get_image_list');
+                const data = await response.json();
+                
                 imagesList = data.images;
+                sortedToOriginalIndex = imagesList.map(img => img.index); // Sıralanmış index'ten orijinal index'e mapping
+                
                 const select = document.getElementById('imageSelect');
                 select.innerHTML = '<option value="">Görsel seçin...</option>';
                 
-                imagesList.forEach((img, index) => {
+                imagesList.forEach((img, sortedIndex) => {
                     const option = document.createElement('option');
-                    option.value = index;
-                    option.textContent = `${index + 1}. ${img.name} (${img.instances} instance)`;
+                    option.value = sortedIndex; // Sıralanmış index'i kullan
+                    const meanIouText = img.mean_iou !== undefined ? ` (Mean IoU: ${img.mean_iou.toFixed(3)})` : '';
+                    option.textContent = `${sortedIndex + 1}. ${img.name} (${img.instances} instance)${meanIouText}`;
                     select.appendChild(option);
                 });
-            });
+                
+                // Liste yüklendikten sonra ilk görseli yükle
+                if (imagesList.length > 0) {
+                    loadImage(0);
+                }
+            } catch (error) {
+                console.error('Görsel listesi yüklenirken hata:', error);
+            }
         }
 
         // Görsel yükleme
-        function loadImage(index) {
-            if (index < 0 || index >= totalImages) return;
+        function loadImage(sortedIndex) {
+            if (sortedIndex < 0 || sortedIndex >= totalImages) return;
             
-            currentImageIndex = index;
+            // sortedToOriginalIndex array'inin hazır olduğundan emin ol
+            if (!sortedToOriginalIndex || sortedToOriginalIndex.length === 0) {
+                console.error('sortedToOriginalIndex henüz hazır değil');
+                return;
+            }
+            
+            // Sıralanmış index'ten orijinal index'e çevir
+            const originalIndex = sortedToOriginalIndex[sortedIndex];
+            if (originalIndex === undefined) {
+                console.error(`originalIndex undefined: sortedIndex=${sortedIndex}, array=${sortedToOriginalIndex}`);
+                return;
+            }
+            
+            currentImageIndex = sortedIndex; // UI için sıralanmış index'i sakla
+            
             document.getElementById('loading').style.display = 'block';
             document.getElementById('imageContainer').style.display = 'none';
             
-            fetch(`/get_image/${index}`)
+            fetch(`/get_image/${originalIndex}`) // Backend'e orijinal index'i gönder
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
@@ -374,7 +415,7 @@
                 document.getElementById('leftImage').src = data.left_image + '?t=' + Date.now();
                 document.getElementById('rightImage').src = data.right_image + '?t=' + Date.now();
                 document.getElementById('imageCounter').textContent = 
-                    `${data.current_index + 1} / ${data.total_images} - ${data.image_name}`;
+                    `${sortedIndex + 1} / ${data.total_images} - ${data.image_name}`;
                 
                 // Mean IoU değerini güncelle
                 if (data.new_mean_iou !== undefined) {
@@ -382,7 +423,7 @@
                         `<i class="fas fa-chart-line"></i> Mean IoU: ${data.new_mean_iou.toFixed(3)}`;
                 }
                 
-                document.getElementById('imageSelect').value = index;
+                document.getElementById('imageSelect').value = sortedIndex; // Sıralanmış index'i kullan
                 
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('imageContainer').style.display = 'flex';
@@ -409,9 +450,9 @@
 
         // ComboBox değişimi
         document.getElementById('imageSelect').addEventListener('change', function() {
-            const index = parseInt(this.value);
-            if (!isNaN(index)) {
-                loadImage(index);
+            const sortedIndex = parseInt(this.value);
+            if (!isNaN(sortedIndex)) {
+                loadImage(sortedIndex);
             }
         });
 

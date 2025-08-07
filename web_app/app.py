@@ -61,13 +61,28 @@ def upload_dataset():
 def get_image_list():
     global images_data
     images = []
+    
+    # Her görsel için mean IoU hesapla
     for i, img_data in enumerate(images_data):
-        instances = len(img_data.get('instances', []))
+        instances = img_data.get('instances', [])
+        new_ious = []
+        
+        for instance in instances:
+            if 'new_obb' in instance and 'iou_with_gt' in instance['new_obb']:
+                new_ious.append(instance['new_obb']['iou_with_gt'])
+        
+        mean_iou = np.mean(new_ious) if new_ious else 0.0
+        
         images.append({
             'index': i,
             'name': img_data.get('image_name', f'Image {i}'),
-            'instances': instances
+            'instances': len(instances),
+            'mean_iou': mean_iou
         })
+    
+    # Mean IoU'ya göre sırala (küçükten büyüğe - en kötü önce)
+    images.sort(key=lambda x: x['mean_iou'])
+    
     return jsonify({'images': images})
 
 @app.route('/get_image/<int:image_index>')

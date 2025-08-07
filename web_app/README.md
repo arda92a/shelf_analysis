@@ -1,21 +1,23 @@
 # OBB Dataset Viewer - Web Uygulaması
 
-Modern web tabanlı OBB (Oriented Bounding Box) dataset görselleştirme uygulaması. Bu uygulama, ground truth segmentation mask'leri ve yeni OBB'leri karşılaştırmalı olarak görselleştirmenizi sağlar.
+Modern web tabanlı OBB (Oriented Bounding Box) dataset görselleştirme uygulaması. Bu uygulama, eski ve yeni OBB'leri karşılaştırmalı olarak görselleştirmenizi sağlar.
 
 ## 🚀 Özellikler
 
 ### 📊 Görselleştirme
-- **Sol Panel**: Ground Truth Segmentation Mask
+- **Sol Panel**: Eski OBB + Ground Truth Mask
 - **Sağ Panel**: Yeni OBB + Ground Truth Mask
 - **Mean IoU Göstergesi**: Sağ panelin üzerinde şık badge
 - **Renk Kodlaması**: 
   - 🟢 **Yeşil**: Ground Truth Mask
+  - 🔴 **Kırmızı**: Eski OBB
   - 🔵 **Mavi**: Yeni OBB
 
 ### 📈 IoU Analizi
 - **Gerçek Zamanlı Hesaplama**: Her görsel için mean IoU
 - **Detaylı Gösterim**: Her shelf için IoU değeri
-- **Performans Analizi**: Yeni OBB performansı
+- **Karşılaştırmalı Analiz**: Eski vs Yeni OBB performansı
+- **Akıllı Sıralama**: Yeni OBB'ye göre en kötüden en iyiye sıralama
 
 ## 🛠️ Kurulum
 
@@ -74,6 +76,11 @@ dataset.zip
       "segmentation_polygon": {
         "coordinates": [[x1,y1], [x2,y2], ...]
       },
+      "old_obb": {
+        "coordinates": [[x1,y1], [x2,y2], ...],
+        "center": [cx, cy],
+        "iou_with_gt": 0.856
+      },
       "new_obb": {
         "coordinates": [[x1,y1], [x2,y2], ...],
         "center": [cx, cy],
@@ -92,11 +99,14 @@ dataset.zip
 - **Dosya Seç**: Manuel olarak dosya seçin
 
 ### 2. Görsel Navigasyon
-- **Dropdown**: Görsel listesinden seçim
+- **Dropdown**: Görsel listesinden seçim (mean IoU ile sıralı)
 - **Önceki/Sonraki**: Butonlarla gezinme
 - **Klavye**: Sol/Sağ ok tuşları
 
 ### 3. Analiz
 - **Mean IoU**: Sağ panelin üzerinde badge
 - **Shelf Detayları**: Her shelf için IoU değeri
-- **Ground Truth**: Sol panelde segmentation mask
+- **Karşılaştırma**: Sol panelde eski OBB, sağ panelde yeni OBB
+- **Sıralama**: En düşük yeni OBB IoU'lu görseller önce gösterilir
+
+
