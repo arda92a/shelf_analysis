@@ -1,0 +1,435 @@
+{
+  "image_name": "06869.jpg",
+  "mean_iou": 0.6221890470191257,
+  "single_iou": [
+    [
+      "00",
+      0.6559525888564433
+    ],
+    [
+      "01",
+      0.666382718406559
+    ],
+    [
+      "02",
+      0.6850026530316057
+    ],
+    [
+      "03",
+      0.509301047396063
+    ],
+    [
+      "04",
+      0.6918999739141601
+    ],
+    [
+      "05",
+      0.524595300509923
+    ]
+  ],
+  "yolo_labels": [
+    {
+      "class_id": 1,
+      "class_name": "shelf",
+      "coordinates": [
+        0.00084,
+        0.13503,
+        0.95542,
+        0.18001,
+        0.95458,
+        0.18999,
+        0.0,
+        0.14501
+      ]
+    },
+    {
+      "class_id": 1,
+      "class_name": "shelf",
+      "coordinates": [
+        0.0,
+        0.314999,
+        0.939767,
+        0.290005,
+        0.940233,
+        0.299995,
+        0.000467,
+        0.324989
+      ]
+    },
+    {
+      "class_id": 1,
+      "class_name": "shelf",
+      "coordinates": [
+        0.0,
+        0.474964,
+        0.91418,
+        0.39004,
+        0.91582,
+        0.39996,
+        0.00164,
+        0.484884
+      ]
+    },
+    {
+      "class_id": 1,
+      "class_name": "shelf",
+      "coordinates": [
+        0.0,
+        0.629894,
+        0.898647,
+        0.490105,
+        0.901353,
+        0.499895,
+        0.002707,
+        0.639684
+      ]
+    },
+    {
+      "class_id": 1,
+      "class_name": "shelf",
+      "coordinates": [
+        0.0,
+        0.784787,
+        0.878113,
+        0.590205,
+        0.881887,
+        0.599795,
+        0.003773,
+        0.794377
+      ]
+    },
+    {
+      "class_id": 1,
+      "class_name": "shelf",
+      "coordinates": [
+        0.0,
+        0.939307,
+        0.945273,
+        0.67065,
+        0.954727,
+        0.68935,
+        0.009453,
+        0.958007
+      ]
+    },
+    {
+      "class_id": 0,
+      "class_name": "shelf-space",
+      "coordinates": [
+        0.002507,
+        0.18503,
+        0.956253,
+        0.20001,
+        0.953747,
+        0.28999,
+        0.0,
+        0.27501
+      ]
+    },
+    {
+      "class_id": 0,
+      "class_name": "shelf-space",
+      "coordinates": [
+        0.0,
+        0.364893,
+        0.936373,
+        0.310105,
+        0.943627,
+        0.379895,
+        0.007253,
+        0.434683
+      ]
+    },
+    {
+      "class_id": 0,
+      "class_name": "shelf-space",
+      "coordinates": [
+        0.0,
+        0.51453,
+        0.901893,
+        0.410465,
+        0.918107,
+        0.489535,
+        0.016213,
+        0.5936
+      ]
+    },
+    {
+      "class_id": 0,
+      "class_name": "shelf-space",
+      "coordinates": [
+        0.0,
+        0.66366,
+        0.88068,
+        0.5013,
+        0.90932,
+        0.5887,
+        0.02864,
+        0.75106
+      ]
+    },
+    {
+      "class_id": 0,
+      "class_name": "shelf-space",
+      "coordinates": [
+        0.0,
+        0.827718,
+        0.877713,
+        0.60216,
+        0.912287,
+        0.67784,
+        0.034573,
+        0.903398
+      ]
+    }
+  ],
+  "segmentation_labels": [
+    {
+      "probability": 100,
+      "type": "polygon",
+      "className": "shelf",
+      "points": [
+        0,
+        300,
+        1425,
+        380,
+        1440,
+        360,
+        0,
+        260
+      ],
+      "groupId": 0,
+      "pointLabels": {},
+      "attributes": [],
+      "error": null,
+      "locked": false,
+      "creationType": "Preannotation",
+      "classId": 1981314
+    },
+    {
+      "probability": 100,
+      "type": "polygon",
+      "className": "shelf",
+      "points": [
+        0,
+        660,
+        1410,
+        600,
+        1410,
+        580,
+        0,
+        620
+      ],
+      "groupId": 0,
+      "pointLabels": {},
+      "attributes": [],
+      "error": null,
+      "locked": false,
+      "creationType": "Preannotation",
+      "classId": 1981314
+    },
+    {
+      "probability": 100,
+      "type": "polygon",
+      "className": "shelf",
+      "points": [
+        0,
+        980,
+        1365,
+        800,
+        1380,
+        780,
+        0,
+        940
+      ],
+      "groupId": 0,
+      "pointLabels": {},
+      "attributes": [],
+      "error": null,
+      "locked": false,
+      "creationType": "Preannotation",
+      "classId": 1981314
+    },
+    {
+      "probability": 100,
+      "type": "polygon",
+      "className": "shelf",
+      "points": [
+        0,
+        1300,
+        1350,
+        1000,
+        1350,
+        980,
+        0,
+        1240
+      ],
+      "groupId": 0,
+      "pointLabels": {},
+      "attributes": [],
+      "error": null,
+      "locked": false,
+      "creationType": "Preannotation",
+      "classId": 1981314
+    },
+    {
+      "probability": 100,
+      "type": "polygon",
+      "className": "shelf",
+      "points": [
+        0,
+        1600,
+        1320,
+        1200,
+        1320,
+        1180,
+        0,
+        1560
+      ],
+      "groupId": 0,
+      "pointLabels": {},
+      "attributes": [],
+      "error": null,
+      "locked": false,
+      "creationType": "Preannotation",
+      "classId": 1981314
+    },
+    {
+      "probability": 100,
+      "type": "polygon",
+      "className": "shelf",
+      "points": [
+        0,
+        1880,
+        1365,
+        1380,
+        1485,
+        1340,
+        0,
+        1920
+      ],
+      "groupId": 0,
+      "pointLabels": {},
+      "attributes": [],
+      "error": null,
+      "locked": false,
+      "creationType": "Preannotation",
+      "classId": 1981314
+    },
+    {
+      "probability": 100,
+      "type": "polygon",
+      "className": "shelf-space",
+      "points": [
+        1440,
+        400,
+        1425,
+        580,
+        0,
+        620,
+        0,
+        300
+      ],
+      "groupId": 0,
+      "pointLabels": {},
+      "attributes": [],
+      "error": null,
+      "locked": false,
+      "creationType": "Preannotation",
+      "classId": 1981315
+    },
+    {
+      "probability": 100,
+      "type": "polygon",
+      "className": "shelf-space",
+      "points": [
+        1425,
+        620,
+        1395,
+        760,
+        0,
+        920,
+        0,
+        680
+      ],
+      "groupId": 0,
+      "pointLabels": {},
+      "attributes": [],
+      "error": null,
+      "locked": false,
+      "creationType": "Preannotation",
+      "classId": 1981315
+    },
+    {
+      "probability": 100,
+      "type": "polygon",
+      "className": "shelf-space",
+      "points": [
+        1380,
+        820,
+        1350,
+        980,
+        0,
+        1240,
+        0,
+        980
+      ],
+      "groupId": 0,
+      "pointLabels": {},
+      "attributes": [],
+      "error": null,
+      "locked": false,
+      "creationType": "Preannotation",
+      "classId": 1981315
+    },
+    {
+      "probability": 100,
+      "type": "polygon",
+      "className": "shelf-space",
+      "points": [
+        1350,
+        1000,
+        1335,
+        1180,
+        0,
+        1540,
+        0,
+        1300
+      ],
+      "groupId": 0,
+      "pointLabels": {},
+      "attributes": [],
+      "error": null,
+      "locked": false,
+      "creationType": "Preannotation",
+      "classId": 1981315
+    },
+    {
+      "probability": 100,
+      "type": "polygon",
+      "className": "shelf-space",
+      "points": [
+        1335,
+        1200,
+        1350,
+        1360,
+        0,
+        1880,
+        0,
+        1600
+      ],
+      "groupId": 0,
+      "pointLabels": {},
+      "attributes": [],
+      "error": null,
+      "locked": false,
+      "creationType": "Preannotation",
+      "classId": 1981315
+    }
+  ],
+  "metadata": {
+    "source_json": "shelf_analysis_results\\iou_scores.json",
+    "total_instances": 6,
+    "rank": 820
+  }
+}
