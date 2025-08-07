@@ -1,3 +1,23 @@
+"""
+Bu script, trapezoid köşe noktalarını optimize edilmiş OBB'ye dönüştürür:
+
++ Algoritma: Hull Sweep
+    -Convex Hull Oluşturma: Trapezoid köşe noktalarından convex hull çıkarır
+    -Açı Sweep: -90° ile +90° arasında her açıda hull'u döndürür
+    -Axis-Aligned BBox: Döndürülmüş hull'dan axis-aligned bounding box bulur
+    -IoU Optimizasyonu: En yüksek IoU'ya sahip OBB'yi seçer
+    -Fallback: Eğer hiçbir OBB bulunamazsa, direkt minAreaRect kullanır
+
+Çıktı Formatı:
+{
+  "obb_coordinates": [center_x, center_y, width, height, angle],
+  "trapezoid_iou": 0.85,
+  "obb_iou": 0.82,
+  "iou_loss": 0.03
+}
+"""
+
+
 import os
 import json
 import cv2

@@ -1,3 +1,21 @@
+"""
+Bu script, binary mask'ten trapezoid (yamuk) şekli çıkarmak için gelişmiş fitting algoritması kullanır:
+
++Algoritma: Trapezoid Fitting
+    -Contour Çıkarma: Mask'ten en büyük contour'u bulur
+    -Trapezoid Hipotezi: Contour'u 4 köşe noktasına indirger
+    -Optimizasyon: Köşe noktalarını iteratif olarak optimize eder
+    -IoU Maksimizasyonu: Trapezoid ile orijinal mask arasında maksimum IoU sağlar
+
+Çıktı Formatı:
+    {
+  "obb_coordinates": [x1, y1, x2, y2, x3, y3, x4, y4],
+  "new_iou": 0.92,
+  "confidence": 1.0,
+  "class_name": "shelf"
+    }
+"""
+
 import os
 import json
 import cv2
