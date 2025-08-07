@@ -85,25 +85,21 @@ def get_image(image_index):
         image_processor = ImageProcessor()
         
         # Görselleştirmeleri oluştur
-        left_image = visualizer.create_old_obb_visualization(img_data)
+        left_image = visualizer.create_segmentation_visualization(img_data)
         right_image = visualizer.create_new_obb_visualization(img_data)
         
         # Görselleri kaydet
         left_image_path = image_processor.save_image(left_image, f'left_{image_index}.png')
         right_image_path = image_processor.save_image(right_image, f'right_{image_index}.png')
         
-        # Mean IoU değerlerini hesapla
+        # Mean IoU değerlerini hesapla (sadece yeni OBB için)
         instances = img_data.get('instances', [])
-        old_ious = []
         new_ious = []
         
         for instance in instances:
-            if 'old_obb' in instance and 'iou_with_gt' in instance['old_obb']:
-                old_ious.append(instance['old_obb']['iou_with_gt'])
             if 'new_obb' in instance and 'iou_with_gt' in instance['new_obb']:
                 new_ious.append(instance['new_obb']['iou_with_gt'])
         
-        old_mean_iou = np.mean(old_ious) if old_ious else 0.0
         new_mean_iou = np.mean(new_ious) if new_ious else 0.0
         
         return jsonify({
@@ -112,7 +108,6 @@ def get_image(image_index):
             'image_name': img_data.get('image_name', f'Image {image_index}'),
             'left_image': f'/get_image_file/{image_index}/left',
             'right_image': f'/get_image_file/{image_index}/right',
-            'old_mean_iou': old_mean_iou,
             'new_mean_iou': new_mean_iou
         })
     except Exception as e:
@@ -131,7 +126,7 @@ def get_image_file(image_index, side):
         image_processor = ImageProcessor()
         
         if side == 'left':
-            image = visualizer.create_old_obb_visualization(img_data)
+            image = visualizer.create_segmentation_visualization(img_data)
             image_path = image_processor.save_image(image, f'left_{image_index}.png')
         elif side == 'right':
             image = visualizer.create_new_obb_visualization(img_data)

@@ -1,22 +1,21 @@
 # OBB Dataset Viewer - Web Uygulaması
 
-Modern web tabanlı OBB (Oriented Bounding Box) dataset görselleştirme uygulaması. Bu uygulama, eski ve yeni OBB'leri karşılaştırmalı olarak görselleştirmenizi sağlar.
+Modern web tabanlı OBB (Oriented Bounding Box) dataset görselleştirme uygulaması. Bu uygulama, ground truth segmentation mask'leri ve yeni OBB'leri karşılaştırmalı olarak görselleştirmenizi sağlar.
 
 ## 🚀 Özellikler
 
 ### 📊 Görselleştirme
-- **Sol Panel**: Eski OBB + Ground Truth Mask
+- **Sol Panel**: Ground Truth Segmentation Mask
 - **Sağ Panel**: Yeni OBB + Ground Truth Mask
-- **Mean IoU Göstergesi**: Her panelin üzerinde şık badge'ler
+- **Mean IoU Göstergesi**: Sağ panelin üzerinde şık badge
 - **Renk Kodlaması**: 
   - 🟢 **Yeşil**: Ground Truth Mask
-  - 🔴 **Kırmızı**: Eski OBB
   - 🔵 **Mavi**: Yeni OBB
 
 ### 📈 IoU Analizi
 - **Gerçek Zamanlı Hesaplama**: Her görsel için mean IoU
 - **Detaylı Gösterim**: Her shelf için IoU değeri
-- **Karşılaştırmalı Analiz**: Eski vs Yeni performans
+- **Performans Analizi**: Yeni OBB performansı
 
 ## 🛠️ Kurulum
 
@@ -75,11 +74,6 @@ dataset.zip
       "segmentation_polygon": {
         "coordinates": [[x1,y1], [x2,y2], ...]
       },
-      "old_obb": {
-        "coordinates": [[x1,y1], [x2,y2], ...],
-        "center": [cx, cy],
-        "iou_with_gt": 0.856
-      },
       "new_obb": {
         "coordinates": [[x1,y1], [x2,y2], ...],
         "center": [cx, cy],
@@ -103,7 +97,6 @@ dataset.zip
 - **Klavye**: Sol/Sağ ok tuşları
 
 ### 3. Analiz
-- **Mean IoU**: Her panelin üzerinde badge
+- **Mean IoU**: Sağ panelin üzerinde badge
 - **Shelf Detayları**: Her shelf için IoU değeri
-- **Karşılaştırma**: Eski vs Yeni performans
-
+- **Ground Truth**: Sol panelde segmentation mask

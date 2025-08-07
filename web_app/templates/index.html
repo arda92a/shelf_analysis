@@ -35,7 +35,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background: linear-gradient(135deg, #28a745, #20c997);
+            background: linear-gradient(135deg, #007bff, #6610f2);
             color: white;
             padding: 8px 15px;
             border-radius: 20px;
@@ -44,12 +44,6 @@
             z-index: 10;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             border: 2px solid rgba(255,255,255,0.3);
-        }
-        .mean-iou-badge.old {
-            background: linear-gradient(135deg, #dc3545, #fd7e14);
-        }
-        .mean-iou-badge.new {
-            background: linear-gradient(135deg, #007bff, #6610f2);
         }
         .loading {
             display: none;
@@ -137,6 +131,7 @@
                         <li><strong>Doğru Yapı:</strong> ZIP içinde direkt JPG ve JSON dosyaları olmalı</li>
                         <li><strong>Örnek:</strong> <code>dataset.zip</code> → <code>00011.jpg</code>, <code>00011.json</code>, <code>00012.jpg</code>, <code>00012.json</code>...</li>
                         <li><strong>Yanlış:</strong> ZIP içinde klasör olmamalı</li>
+                        <li><strong>Boyut:</strong> Sınırsız</li>
                     </ul>
                 </div>
             </div>
@@ -219,17 +214,11 @@
                         <div class="visualization-container" id="imageContainer">
                             <div class="visualization-panel">
                                 <div class="image-container">
-                                    <div class="image-title">Eski OBB + Mask</div>
-                                    <div class="mean-iou-badge old" id="oldMeanIou">
-                                        <i class="fas fa-chart-line"></i> Mean IoU: 0.000
-                                    </div>
-                                    <img id="leftImage" src="" alt="Eski OBB">
+                                    <div class="image-title">Segmentation Mask</div>
+                                    <img id="leftImage" src="" alt="Segmentation Mask">
                                     <div class="legend">
                                         <div class="legend-item">
-                                            <span class="legend-color" style="background: green;"></span>Mask
-                                        </div>
-                                        <div class="legend-item">
-                                            <span class="legend-color" style="background: red;"></span>Eski OBB
+                                            <span class="legend-color" style="background: green;"></span>Ground Truth
                                         </div>
                                     </div>
                                 </div>
@@ -237,7 +226,7 @@
                             <div class="visualization-panel">
                                 <div class="image-container">
                                     <div class="image-title">Yeni OBB + Mask</div>
-                                    <div class="mean-iou-badge new" id="newMeanIou">
+                                    <div class="mean-iou-badge" id="newMeanIou">
                                         <i class="fas fa-chart-line"></i> Mean IoU: 0.000
                                     </div>
                                     <img id="rightImage" src="" alt="Yeni OBB">
@@ -388,11 +377,7 @@
                 document.getElementById('imageCounter').textContent = 
                     `${data.current_index + 1} / ${data.total_images} - ${data.image_name}`;
                 
-                // Mean IoU değerlerini güncelle
-                if (data.old_mean_iou !== undefined) {
-                    document.getElementById('oldMeanIou').innerHTML = 
-                        `<i class="fas fa-chart-line"></i> Mean IoU: ${data.old_mean_iou.toFixed(3)}`;
-                }
+                // Mean IoU değerini güncelle
                 if (data.new_mean_iou !== undefined) {
                     document.getElementById('newMeanIou').innerHTML = 
                         `<i class="fas fa-chart-line"></i> Mean IoU: ${data.new_mean_iou.toFixed(3)}`;
