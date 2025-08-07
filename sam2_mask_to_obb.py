@@ -401,7 +401,7 @@ def main():
     MODEL_PATH = "sam2.1_l.pt"  # SAM2 model dosyası
     JSON_DIR = "segmentation_labels"  # Segmentation etiketleri dizini
     OUTPUT_DIR = "pure_sam2_obb_results"  # Çıktı dizini
-    IMAGE_DIR = "new_dataset/worst_dataset_pure"  # Orijinal görseller dizini
+    IMAGE_DIR = "new_dataset/worst_dataset_1000"  # Orijinal görseller dizini
     DEVICE = "cuda"  
     VISUALIZE = True  # Gelişmiş görselleştirme
     
