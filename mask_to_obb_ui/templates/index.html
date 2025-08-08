@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mask to OBB Dönüşümü</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 95vw;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .tabs {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .tab {
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.4);
+            color: #fff;
+            background: rgba(255,255,255,0.15);
+        }
+        .tab.active {
+            background: #fff;
+            color: #667eea;
+            border-color: #fff;
+            font-weight: 600;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .upload-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .upload-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .file-input {
+            background: white;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-input:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .file-input.dragover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .file-input input[type="file"] {
+            display: none;
+        }
+
+        .file-input i {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .file-input label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .file-input p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .upload-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-section {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .info-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .info-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .visualization-steps {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 30px;
+            margin-bottom: 30px;
+            align-items: start;
+        }
+
+        .step-container {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .download-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0 5px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: #f0f4ff;
+            color: #445;
+            text-decoration: none;
+            border: 1px solid #dde3ff;
+        }
+        .download-link:hover {
+            background: #e6ecff;
+        }
+
+        .step-container h3 {
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .step-image {
+            width: 100%;
+            height: auto;
+            max-height: 750px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .step-description {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8em;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+
+        .iou-results {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .iou-results h3 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .iou-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .iou-table th,
+        .iou-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .iou-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .iou-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .improvement-positive {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .improvement-negative {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-cogs"></i> Mask to OBB Dönüşümü</h1>
+            <p>Mask poligon segmentation'ından OBB'ye dönüşüm sürecini adım adım görselleştirin</p>
+            <div class="tabs">
+                <a class="tab active" href="/">Dönüşüm</a>
+                <a class="tab" href="/viewer">Viewer</a>
+                <a class="tab" href="/batch">Batch</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="upload-section">
+                <h2><i class="fas fa-upload"></i> Dosya Yükleme</h2>
+                
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="file-inputs">
+                        <div class="file-input" onclick="document.getElementById('maskFile').click()">
+                            <input type="file" id="maskFile" name="mask_file" accept=".json" required aria-label="Mask JSON Dosyası">
+                            <i class="fas fa-shapes"></i>
+                            <label for="maskFile">Mask JSON Dosyası</label>
+                            <p>Poligon segmentation verilerini içeren JSON dosyası</p>
+                        </div>
+
+                        <div class="file-input" onclick="document.getElementById('imageFile').click()">
+                            <input type="file" id="imageFile" name="image_file" accept="image/*" required aria-label="Görsel Dosyası">
+                            <i class="fas fa-image"></i>
+                            <label for="imageFile">Görsel Dosyası</label>
+                            <p>İşlenecek görsel dosyası (JPG, PNG, vb.)</p>
+                        </div>
+
+                        <div class="file-input" onclick="document.getElementById('yoloFile').click()">
+                            <input type="file" id="yoloFile" name="yolo_file" accept=".txt" aria-label="YOLO TXT Dosyası (Opsiyonel)">
+                            <i class="fas fa-file-alt"></i>
+                            <label for="yoloFile">YOLO TXT Dosyası (Opsiyonel)</label>
+                            <p>İlk OBB verilerini içeren YOLO formatında TXT dosyası</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="upload-btn" id="uploadBtn">
+                        <i class="fas fa-play"></i>
+                        Dönüşümü Başlat
+                    </button>
+                </form>
+                <div style="margin-top:16px; display:flex; justify-content:center;">
+                    <a class="upload-btn" href="/batch" style="text-decoration:none;">
+                        <i class="fas fa-layer-group"></i> Batch Processing'e Geç
+                    </a>
+                </div>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <h3>Dönüşüm işleniyor...</h3>
+                <p>Lütfen bekleyin, dosyalarınız işleniyor.</p>
+            </div>
+
+            <div class="alert" id="alert"></div>
+
+            <div class="results-section" id="resultsSection">
+                <h2><i class="fas fa-chart-bar"></i> Sonuçlar</h2>
+                
+                <div class="info-cards" id="infoCards">
+                    <!-- Bilgi kartları buraya eklenecek -->
+                </div>
+
+                <div class="visualization-steps" id="visualizationSteps">
+                    <!-- Adım adım görselleştirmeler buraya eklenecek -->
+                </div>
+
+                <div class="iou-results" id="iouResults">
+                    <!-- IoU sonuçları buraya eklenecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dosya yükleme işlemleri
+        const uploadForm = document.getElementById('uploadForm');
+        const loading = document.getElementById('loading');
+        const alert = document.getElementById('alert');
+        const resultsSection = document.getElementById('resultsSection');
+        const infoCards = document.getElementById('infoCards');
+        const visualizationSteps = document.getElementById('visualizationSteps');
+        const iouResultsEl = document.getElementById('iouResults');
+        const uploadBtn = document.getElementById('uploadBtn');
+
+        // Drag & drop işlemleri
+        const fileInputs = document.querySelectorAll('.file-input');
+        fileInputs.forEach(input => {
+            input.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                input.classList.add('dragover');
+            });
+
+            input.addEventListener('dragleave', () => {
+                input.classList.remove('dragover');
+            });
+
+            input.addEventListener('drop', (e) => {
+                e.preventDefault();
+                input.classList.remove('dragover');
+                const fileInput = input.querySelector('input[type="file"]');
+                if (e.dataTransfer.files.length > 0) {
+                    fileInput.files = e.dataTransfer.files;
+                    updateFileLabel(input, e.dataTransfer.files[0].name);
+                }
+            });
+        });
+
+        // Dosya seçildiğinde label güncelle
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    const fileInput = e.target.closest('.file-input');
+                    updateFileLabel(fileInput, e.target.files[0].name);
+                }
+            });
+        });
+
+        function updateFileLabel(fileInput, fileName) {
+            const label = fileInput.querySelector('label');
+            label.textContent = fileName;
+            label.style.color = '#667eea';
+        }
+
+        // Form gönderimi
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(uploadForm);
+            
+            // Loading göster
+            loading.classList.add('show');
+            uploadBtn.disabled = true;
+            hideAlert();
+            
+            try {
+                const response = await fetch('/upload_files', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('Dosyalar başarıyla yüklendi ve işlendi!', 'success');
+                    await loadResults(result);
+                } else {
+                    showAlert(result.error || 'Bir hata oluştu', 'error');
+                }
+            } catch (error) {
+                showAlert('Bağlantı hatası: ' + error.message, 'error');
+            } finally {
+                loading.classList.remove('show');
+                uploadBtn.disabled = false;
+            }
+        });
+
+        async function loadResults(result) {
+            try {
+                // Bilgileri yükle
+                const infoResponse = await fetch('/get_process_info');
+                const infoData = await infoResponse.json();
+                
+                if (infoResponse.ok) {
+                    displayInfoCards(infoData);
+                    displayVisualizationSteps(result);
+                    displayIoUResults(result.iou_results);
+                    resultsSection.classList.add('show');
+                }
+            } catch (error) {
+                showAlert('Sonuçlar yüklenirken hata: ' + error.message, 'error');
+            }
+        }
+
+        function displayInfoCards(data) {
+            infoCards.innerHTML = `
+                <div class="info-card">
+                    <h3>Görsel Adı</h3>
+                    <div class="value">${data.image_name}</div>
+                </div>
+                <div class="info-card">
+                    <h3>Boyutlar</h3>
+                    <div class="value">${data.image_width}×${data.image_height}</div>
+                </div>
+                <div class="info-card">
+                    <h3>Toplam Instance</h3>
+                    <div class="value">${data.total_instances}</div>
+                </div>
+                <div class="info-card">
+                    <h3>Shelf Instance</h3>
+                    <div class="value">${data.shelf_instances}</div>
+                </div>
+                <div class="info-card">
+                    <h3>Shelf-Space Instance</h3>
+                    <div class="value">${data.shelf_space_instances}</div>
+                </div>
+                <div class="info-card">
+                    <h3>YOLO Verisi</h3>
+                    <div class="value">${data.has_yolo_data ? 'Var' : 'Yok'}</div>
+                </div>
+            `;
+        }
+
+        function displayVisualizationSteps(result) {
+            console.log('Display visualization steps:', result);
+            visualizationSteps.innerHTML = `
+                <div class="step-container" style="grid-column: 1 / 2;">
+                    <h3><i class="fas fa-eye"></i> Adım 1: Orijinal</h3>
+                    <img src="${result.step1}?${new Date().getTime()}" class="step-image" alt="Adım 1" onerror="console.error('Step 1 image failed to load:', this.src)">
+                    <a href="${result.step1}" download class="download-link"><i class="fas fa-download"></i> İndir</a>
+                    <div class="step-description">
+                        Orijinal görsel + Mask poligonları (yeşil) + YOLO OBB'leri (sarı)
+                    </div>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #00ff00;"></div>
+                            <span>Mask (Dolu)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #00ffff;"></div>
+                            <span>YOLO OBB (Çevre)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-container" style="grid-column: 2 / 3;">
+                    <h3><i class="fas fa-shapes"></i> Adım 2: Trapezoid</h3>
+                    <img src="${result.step2}?${new Date().getTime()}" class="step-image" alt="Adım 2" onerror="console.error('Step 2 image failed to load:', this.src)">
+                    <a href="${result.step2}" download class="download-link"><i class="fas fa-download"></i> İndir</a>
+                    <div class="step-description">
+                        Mask poligonlarından trapezoid fit edilmiş hali (kırmızı)
+                    </div>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #ff0000;"></div>
+                            <span>Trapezoid (Çevre)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-container" style="grid-column: 1 / 3;">
+                    <h3><i class="fas fa-cube"></i> Adım 3: OBB Karşılaştırma</h3>
+                    <img src="${result.step3}?${new Date().getTime()}" class="step-image" alt="Adım 3" onerror="console.error('Step 3 image failed to load:', this.src)">
+                    <div style="display:flex; gap:10px; justify-content:center;">
+                        <a href="${result.step3}" download class="download-link"><i class="fas fa-download"></i> Görseli İndir</a>
+                        <a href="/get_visualization/obb_json" class="download-link"><i class="fas fa-file-download"></i> Yeni OBB (JSON) İndir</a>
+                    </div>
+                    <div class="step-description">
+                        Yeni OBB'ler (mavi) + IoU karşılaştırması
+                    </div>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #0000ff;"></div>
+                            <span>Yeni OBB (Çevre)</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayIoUResults(iouResultsData) {
+            if (!iouResultsData || iouResultsData.length === 0) {
+                iouResultsEl.innerHTML = '<p>IoU sonuçları bulunamadı.</p>';
+                return;
+            }
+
+            let tableHTML = `
+                <h3><i class="fas fa-chart-line"></i> IoU Karşılaştırma Sonuçları</h3>
+                <table class="iou-table">
+                    <thead>
+                        <tr>
+                            <th>Shelf ID</th>
+                            <th>Eski IoU</th>
+                            <th>Yeni IoU</th>
+                            <th>İyileştirme</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            iouResultsData.forEach(result => {
+                const improvementClass = result.improvement > 0 ? 'improvement-positive' : 'improvement-negative';
+                const improvementSign = result.improvement > 0 ? '+' : '';
+                
+                tableHTML += `
+                    <tr>
+                        <td>Shelf ${result.shelf_id}</td>
+                        <td>${result.old_iou > 0 ? result.old_iou.toFixed(3) : 'N/A'}</td>
+                        <td>${result.new_iou.toFixed(3)}</td>
+                        <td class="${improvementClass}">${improvementSign}${result.improvement.toFixed(3)}</td>
+                    </tr>
+                `;
+            });
+
+            // Mean IoU'ları hesapla
+            const validOldIous = iouResultsData.filter(r => r.old_iou > 0);
+            const meanOldIou = validOldIous.length > 0 ? validOldIous.reduce((sum, r) => sum + r.old_iou, 0) / validOldIous.length : 0;
+            const meanNewIou = iouResultsData.reduce((sum, r) => sum + r.new_iou, 0) / iouResultsData.length;
+            const meanImprovement = meanNewIou - meanOldIou;
+
+            tableHTML += `
+                    <tr style="font-weight: bold; background: #f8f9fa;">
+                        <td>Ortalama</td>
+                        <td>${meanOldIou > 0 ? meanOldIou.toFixed(3) : 'N/A'}</td>
+                        <td>${meanNewIou.toFixed(3)}</td>
+                        <td class="${meanImprovement > 0 ? 'improvement-positive' : 'improvement-negative'}">${meanImprovement > 0 ? '+' : ''}${meanImprovement.toFixed(3)}</td>
+                    </tr>
+                </tbody>
+            </table>
+            `;
+
+            iouResultsEl.innerHTML = tableHTML;
+            appendAnalysisSection(iouResultsEl);
+        }
+
+        function appendAnalysisSection(containerEl) {
+            // Basit görsel analiz özeti
+            const table = document.querySelector('.iou-table tbody');
+            if (!table) return;
+            const rows = Array.from(table.querySelectorAll('tr'));
+            // Son satır (Ortalama) harici satırlar
+            const dataRows = rows.slice(0, -1);
+            const improvements = dataRows.map(r => parseFloat(r.children[3].textContent));
+            const improvedCount = improvements.filter(v => v > 0).length;
+            const degradedCount = improvements.filter(v => v < 0).length;
+            const unchangedCount = improvements.filter(v => v === 0).length;
+            const topImproved = [...improvements]
+                .map((v, idx) => ({ idx: idx + 1, v }))
+                .sort((a, b) => b.v - a.v)
+                .slice(0, 5);
+            const topDegraded = [...improvements]
+                .map((v, idx) => ({ idx: idx + 1, v }))
+                .sort((a, b) => a.v - b.v)
+                .slice(0, 5);
+            const meanRow = rows[rows.length - 1];
+            const meanOld = meanRow.children[1].textContent;
+            const meanNew = meanRow.children[2].textContent;
+            const meanImp = meanRow.children[3].textContent;
+
+            const analysisHTML = `
+                <div class="iou-results" style="margin-top: 25px;">
+                    <h3><i class="fas fa-clipboard-list"></i> Analiz Özeti</h3>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-top: 10px;">
+                        <div class="info-card">
+                            <h3>İyileşen Raf Sayısı</h3>
+                            <div class="value">${improvedCount}</div>
+                        </div>
+                        <div class="info-card">
+                            <h3>Kötüleşen Raf Sayısı</h3>
+                            <div class="value">${degradedCount}</div>
+                        </div>
+                        <div class="info-card">
+                            <h3>Değişmeyen</h3>
+                            <div class="value">${unchangedCount}</div>
+                        </div>
+                        <div class="info-card">
+                            <h3>Mean IoU (Old → New)</h3>
+                            <div class="value">${meanOld} → ${meanNew}</div>
+                        </div>
+                        <div class="info-card">
+                            <h3>Mean İyileşme</h3>
+                            <div class="value">${meanImp}</div>
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top: 15px;">
+                        <div>
+                            <h4>En Çok İyileşen İlk 5</h4>
+                            <ul>
+                                ${topImproved.map(t => `<li>Shelf ${t.idx}: ${t.v.toFixed(3)}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>En Çok Kötüleşen İlk 5</h4>
+                            <ul>
+                                ${topDegraded.map(t => `<li>Shelf ${t.idx}: ${t.v.toFixed(3)}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+            containerEl.insertAdjacentHTML('beforeend', analysisHTML);
+        }
+
+        function showAlert(message, type) {
+            alert.textContent = message;
+            alert.className = `alert ${type} show`;
+        }
+
+        function hideAlert() {
+            alert.classList.remove('show');
+        }
+    </script>
+</body>
+</html>
